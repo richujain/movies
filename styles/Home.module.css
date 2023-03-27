@@ -1,38 +1,29 @@
 .container {
   min-height: 100vh;
-  padding: 0 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.title a {
-  color: #0070f3;
-  text-decoration: none;
-}
-
-.title a:hover,
-.title a:focus,
-.title a:active {
-  text-decoration: underline;
+  width: 100%;
 }
 
 .title {
-  margin: 0 0 1rem;
   line-height: 1.15;
   font-size: 3.6rem;
+  position: absolute;
+  top: 0;
+  left: 3rem;
+  color: #e50914;
 }
 
 .title {
-  text-align: center;
+  text-align: left;
 }
 
 .title,
 .description {
   text-align: center;
 }
-
 
 .description {
   line-height: 1.5;
