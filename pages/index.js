@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -8,7 +8,12 @@ export default function Home() {
   const [tvshows, setTvshows] = useState([]);
   const imageBaseUrl = "https://image.tmdb.org/t/p/";
   const imageSize = "w500";
+  const child = { width: `300em`, height: `100%` };
   let json = "";
+  const moviesRef = useRef();
+  const trendingRef = useRef();
+  const tvShowsRef = useRef();
+
   const fetchTrending = () => {
     return fetch(
       "https://api.themoviedb.org/3/trending/all/week?api_key=b7d4d62c7edae48d1014982bccd4635f"
@@ -44,6 +49,56 @@ export default function Home() {
       });
   };
 
+  const onMovieClicked = (movieId) => {
+    console.log("movieId: " + movieId);
+  };
+
+  const scrollForTrending = () => {
+    const el = trendingRef.current;
+    if (el) {
+      const onWheel = (e) => {
+        if (e.deltaY == 0) return;
+        e.preventDefault();
+        el.scrollTo({
+          left: el.scrollLeft + e.deltaY,
+          behavior: "smooth",
+        });
+      };
+      el.addEventListener("wheel", onWheel);
+      return () => el.removeEventListener("wheel", onWheel);
+    }
+  };
+  const scrollForMovies = () => {
+    const el = moviesRef.current;
+    if (el) {
+      const onWheel = (e) => {
+        if (e.deltaY == 0) return;
+        e.preventDefault();
+        el.scrollTo({
+          left: el.scrollLeft + e.deltaY,
+          behavior: "smooth",
+        });
+      };
+      el.addEventListener("wheel", onWheel);
+      return () => el.removeEventListener("wheel", onWheel);
+    }
+  };
+  const scrollForTvShows = () => {
+    const el = tvShowsRef.current;
+    if (el) {
+      const onWheel = (e) => {
+        if (e.deltaY == 0) return;
+        e.preventDefault();
+        el.scrollTo({
+          left: el.scrollLeft + e.deltaY,
+          behavior: "smooth",
+        });
+      };
+      el.addEventListener("wheel", onWheel);
+      return () => el.removeEventListener("wheel", onWheel);
+    }
+  };
+
   useEffect(() => {
     fetchTrending().then((res) => {
       setTrending(res.results);
@@ -54,6 +109,11 @@ export default function Home() {
     fetchTvshows().then((res) => {
       setTvshows(res.results);
     });
+    // ----------------------------------------------------------
+    scrollForTrending();
+    scrollForMovies();
+    scrollForTvShows();
+    // ----------------------------------------------------------
   }, []);
   return (
     <div className={styles.container}>
@@ -66,15 +126,24 @@ export default function Home() {
           className={styles.logo}
           src="https://fontmeme.com/permalink/230327/5edd1be1ee20090e9de67bbe7465bb2b.png"
         />
+        {/* <img
+          className={styles.logo}
+          src="https://fontmeme.com/permalink/230327/5edd1be1ee20090e9de67bbe7465bb2b.png"
+        /> */}
       </div>
       <main className={styles.mainContainer}>
         <div className={styles.subContainer}>
           <h3 className={styles.title}>Trending Now</h3>
-          <div className={styles.list}>
+
+          <div className={styles.list} ref={trendingRef}>
             {trending.map((movie) => {
               console.log(movie);
               return (
-                <div className={styles.item} key={movie.id}>
+                <div
+                  className={styles.item}
+                  key={movie.id}
+                  onClick={() => onMovieClicked(movie.id)}
+                >
                   <img
                     className={styles.movieImage}
                     src={`${imageBaseUrl}${imageSize}${movie.backdrop_path}`}
@@ -89,7 +158,7 @@ export default function Home() {
         </div>
         <div className={styles.subContainer}>
           <h3 className={styles.title}>Movies</h3>
-          <div className={styles.list}>
+          <div className={styles.list} ref={moviesRef}>
             {movies.map((movie) => {
               return (
                 <div className={styles.item} key={movie.id}>
@@ -108,7 +177,7 @@ export default function Home() {
 
         <div className={styles.subContainer}>
           <h3 className={styles.title}>TV Shows</h3>
-          <div className={styles.list}>
+          <div className={styles.list} ref={tvShowsRef}>
             {tvshows.map((movie) => {
               return (
                 <div className={styles.item} key={movie.id}>
