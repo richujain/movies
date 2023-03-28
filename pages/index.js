@@ -3,13 +3,38 @@ import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const [trending, setTrending] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [tvshows, setTvshows] = useState([]);
   const imageBaseUrl = "https://image.tmdb.org/t/p/";
   const imageSize = "w500";
   let json = "";
+  const fetchTrending = () => {
+    return fetch(
+      "https://api.themoviedb.org/3/trending/all/week?api_key=b7d4d62c7edae48d1014982bccd4635f"
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+  };
   const fetchMovies = () => {
     return fetch(
-      "https://api.themoviedb.org/3/trending/movie/week?api_key=b7d4d62c7edae48d1014982bccd4635f"
+      "https://api.themoviedb.org/3/discover/movie?api_key=b7d4d62c7edae48d1014982bccd4635f&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate"
+    )
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+  };
+  const fetchTvshows = () => {
+    return fetch(
+      "https://api.themoviedb.org/3/discover/tv?api_key=b7d4d62c7edae48d1014982bccd4635f&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate"
     )
       .then((response) => {
         return response.json();
@@ -20,8 +45,14 @@ export default function Home() {
   };
 
   useEffect(() => {
+    fetchTrending().then((res) => {
+      setTrending(res.results);
+    });
     fetchMovies().then((res) => {
       setMovies(res.results);
+    });
+    fetchTvshows().then((res) => {
+      setTvshows(res.results);
     });
   }, []);
   return (
@@ -40,23 +71,59 @@ export default function Home() {
         <div className={styles.subContainer}>
           <h3 className={styles.title}>Trending Now</h3>
           <div className={styles.list}>
-            {movies.map((movie) => {
+            {trending.map((movie) => {
               console.log(movie);
               return (
-                <div className={styles.item}>
+                <div className={styles.item} key={movie.id}>
                   <img
                     className={styles.movieImage}
                     src={`${imageBaseUrl}${imageSize}${movie.backdrop_path}`}
                   />
-                  <h3 className={styles.movieTitle}>{movie.title}</h3>
+                  <h3 className={styles.movieTitle}>
+                    {movie.title ? movie.title : movie.name}
+                  </h3>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div className={styles.subContainer}>
+          <h3 className={styles.title}>Movies</h3>
+          <div className={styles.list}>
+            {movies.map((movie) => {
+              return (
+                <div className={styles.item} key={movie.id}>
+                  <img
+                    className={styles.movieImage}
+                    src={`${imageBaseUrl}${imageSize}${movie.backdrop_path}`}
+                  />
+                  <h3 className={styles.movieTitle}>
+                    {movie.title ? movie.title : movie.name}
+                  </h3>
                 </div>
               );
             })}
           </div>
         </div>
 
-        <h3 className={styles.title}>Movies</h3>
-        <h3 className={styles.title}>TV Shows</h3>
+        <div className={styles.subContainer}>
+          <h3 className={styles.title}>TV Shows</h3>
+          <div className={styles.list}>
+            {tvshows.map((movie) => {
+              return (
+                <div className={styles.item} key={movie.id}>
+                  <img
+                    className={styles.movieImage}
+                    src={`${imageBaseUrl}${imageSize}${movie.backdrop_path}`}
+                  />
+                  <h3 className={styles.movieTitle}>
+                    {movie.title ? movie.title : movie.name}
+                  </h3>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </main>
       <style jsx>{`
         main {
@@ -99,6 +166,7 @@ export default function Home() {
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
             sans-serif;
+          overflow-x: hidden;
         }
         * {
           box-sizing: border-box;
