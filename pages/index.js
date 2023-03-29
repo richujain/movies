@@ -155,6 +155,10 @@ export default function Home() {
         console.log(e.message);
       });
   };
+  const logoClicked = () => {
+    router.push("/");
+    setSearchTitle("");
+  };
 
   useEffect(() => {
     fetchTrending().then((res) => {
@@ -187,7 +191,7 @@ export default function Home() {
       </Head>
       <div className={styles.header}>
         <img
-          onClick={() => router.push("/")}
+          onClick={logoClicked}
           className={styles.logo}
           src="https://fontmeme.com/permalink/230327/5edd1be1ee20090e9de67bbe7465bb2b.png"
         />

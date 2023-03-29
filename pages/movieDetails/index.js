@@ -21,6 +21,9 @@ export default function index() {
         console.log(e.message);
       });
   };
+  const logoClicked = () => {
+    router.push("/");
+  };
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -44,6 +47,7 @@ export default function index() {
       </Head>
       <div className={styles.header}>
         <img
+          onClick={logoClicked}
           className={styles.logo}
           src="https://fontmeme.com/permalink/230327/5edd1be1ee20090e9de67bbe7465bb2b.png"
         />
