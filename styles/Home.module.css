@@ -6,11 +6,27 @@
 }
 .header {
   display: flex;
-  width: 100%;
+  width: 100vw;
   flex-direction: row;
   margin-top: 2rem;
   margin-left: 5rem;
   justify-content: space-between;
+}
+.search {
+  margin: 1rem;
+  margin-right: 10rem;
+  background-color: #000;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  align-self: flex-end;
+  height: 3rem;
+  border: none;
+  border-bottom: 1px solid #fff;
+  color: #fff;
+  font-size: 1.5rem;
+}
+.search:focus {
+  outline: none;
 }
 .mainContainer {
   display: flex;
@@ -29,6 +45,7 @@
   gap: 0.5rem;
   overflow-x: hidden;
   cursor: pointer;
+  gap: 1rem;
 }
 
 .item {
