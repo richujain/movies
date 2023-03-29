@@ -123,6 +123,7 @@ export default function Home() {
     });
   };
   const handleChange = (event) => {
+    scrollForSearch();
     setSearchTitle(event.target.value);
     if (searchTitle)
       searchInDatabase().then((res) => {
@@ -156,8 +157,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setSearchResults("");
-    setSearchTitle("");
     fetchTrending().then((res) => {
       setTrending(res.results);
     });
@@ -173,7 +172,13 @@ export default function Home() {
     scrollForTvShows();
     scrollForSearch();
     // ------------------
-  }, []);
+    if (searchTitle == "") {
+      scrollForTrending();
+      scrollForMovies();
+      scrollForTvShows();
+      scrollForSearch();
+    }
+  }, [searchTitle]);
   return (
     <div className={styles.container}>
       <Head>
@@ -226,7 +231,7 @@ export default function Home() {
         ) : (
           <></>
         )}
-        {!searchTitle ? (
+        {searchTitle == "" ? (
           <>
             <div className={styles.subContainer}>
               <h3 className={styles.title}>Trending Now</h3>
