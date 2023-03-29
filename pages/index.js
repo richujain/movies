@@ -9,7 +9,7 @@ export default function Home() {
   const [trending, setTrending] = useState([]);
   const [movies, setMovies] = useState([]);
   const [tvshows, setTvshows] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState("");
   const [searchTitle, setSearchTitle] = useState([]);
   const imageBaseUrl = "https://image.tmdb.org/t/p/";
   const imageSize = "w1280";
@@ -124,6 +124,12 @@ export default function Home() {
   };
   const handleChange = (event) => {
     setSearchTitle(event.target.value);
+    if (searchTitle)
+      searchInDatabase().then((res) => {
+        setSearchResults(res.results);
+        console.log(res.results);
+      });
+    else setSearchResults("");
   };
   const searchMovies = (event) => {
     if (event.key === "Enter") {
@@ -150,6 +156,8 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setSearchResults("");
+    setSearchTitle("");
     fetchTrending().then((res) => {
       setTrending(res.results);
     });
@@ -174,6 +182,7 @@ export default function Home() {
       </Head>
       <div className={styles.header}>
         <img
+          onClick={() => router.push("/")}
           className={styles.logo}
           src="https://fontmeme.com/permalink/230327/5edd1be1ee20090e9de67bbe7465bb2b.png"
         />
@@ -191,7 +200,7 @@ export default function Home() {
         /> */}
       </div>
       <main className={styles.mainContainer}>
-        {searchResults ? (
+        {searchResults && searchTitle ? (
           <div className={styles.subContainer}>
             <h3 className={styles.title}>SearchResults</h3>
             <div className={styles.list} ref={searchingRef}>
@@ -217,7 +226,7 @@ export default function Home() {
         ) : (
           <></>
         )}
-        {!searchResults ? (
+        {!searchTitle ? (
           <>
             <div className={styles.subContainer}>
               <h3 className={styles.title}>Trending Now</h3>
