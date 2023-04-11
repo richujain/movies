@@ -58,7 +58,17 @@ export default function index() {
             <div className={styles.bgImg}>
               <h1 className={styles.title}>{movie.title}</h1>
               <p className={styles.overview}>{movie.overview}</p>
-              <p className={styles.rating}>{movie.vote_average}</p>
+              <div className={styles.flexHorizontalContainer}>
+                <p className={styles.playButton}>
+                  <img
+                    className={styles.playIcon}
+                    src="/static/play.png"
+                    alt="Play Logo"
+                  />
+                  Play
+                </p>
+                <p className={styles.rating}>{movie.vote_average}</p>
+              </div>
             </div>
           ) : (
             <></>
