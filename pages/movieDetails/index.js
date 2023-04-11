@@ -24,6 +24,12 @@ export default function index() {
   const logoClicked = () => {
     router.push("/");
   };
+  const playMovie = () => {
+    router.push({
+      pathname: "/playMovie",
+      query: { movieId: movieId },
+    });
+  };
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -58,7 +64,10 @@ export default function index() {
             <div className={styles.bgImg}>
               <h1 className={styles.title}>{movie.title}</h1>
               <p className={styles.overview}>{movie.overview}</p>
-              <div className={styles.flexHorizontalContainer}>
+              <div
+                className={styles.flexHorizontalContainer}
+                onClick={playMovie}
+              >
                 <p className={styles.playButton}>
                   <img
                     className={styles.playIcon}
