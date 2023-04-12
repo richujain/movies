@@ -39,6 +39,7 @@ export default function index() {
     window.alert("Trailer not found.");
     history.back();
   };
+
   useEffect(() => {
     if (!router.isReady) return;
     fetchTrailer()
@@ -53,6 +54,7 @@ export default function index() {
     <div className={styles.container}>
       {key ? (
         <ReactPlayer
+          id="player"
           // url="https://www.youtube.com/watch?v=ysz5S6PUM-U"
           url={`https://www.youtube.com/watch?v=${key}`}
           playing={true}
